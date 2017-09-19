@@ -18,6 +18,7 @@ fps = 60
 def draw():
     game_display.fill(black)
     my_alien.draw(game_display)
+    laser.draw(game_display)
 
 def set_boundaries():
     if my_alien.get_x_position() > (display_width - 80):
@@ -34,7 +35,7 @@ def set_boundaries():
     
 
 
-def events(my_alien):
+def events(my_alien, laser):
     if event.type == pygame.QUIT:
         pygame.quit()
         quit()
@@ -52,9 +53,9 @@ def events(my_alien):
         if event.key == pygame.K_s:
             my_alien.set_y_change(5)
 
-        if event.key == pygame.K_SPACE:
-            laser = Laser(my_alien.get_x_position() + 80, my_alien.get_y_position() + 10, 'resource/laser.png')
-            laser.draw(game_display)
+        if event.key == pygame.K_j:
+            laser.set_x_position(my_alien.get_x_position() + 80)
+            laser.set_y_position(my_alien.get_y_position() + 20)
 
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_a or event.key == pygame.K_d:
@@ -65,6 +66,8 @@ def events(my_alien):
             my_alien.set_y_change(0)
             my_alien.set_y_position(my_alien.get_y_position())
 
+        if event.key == pygame.K_j:
+            laser.set_x_change(15)
 
 # pygame begin
 
@@ -77,12 +80,13 @@ pygame.display.set_caption(title)
 clock = pygame.time.Clock()
 
 my_alien = Alien(100, 100, 'resource/roughspaceship.png')
+laser = Laser(my_alien.get_x_position(), my_alien.get_y_position(), 'resource/laser.png')
 
 while game_is_running:
     set_boundaries()
     draw()
     for event in pygame.event.get():
-        events(my_alien)
+        events(my_alien, laser)
 
     pygame.display.update()
 
